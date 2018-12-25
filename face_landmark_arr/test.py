@@ -1,4 +1,4 @@
-#usage :python landmarkPredict.py predictImage  testList.txt
+#usage :python test.py initial_face.gif 
 
 import os
 import sys
@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import imageio
 import glob
 import shutil
-
+import time
 
 system_height = 650
 system_width = 1280
@@ -258,13 +258,17 @@ if  __name__ == '__main__':
     if len(sys.argv) < 2:
 	print(__doc__)
     else:
+	start_time = time.time()
 	_files1 = os.listdir('./img_res')
 	_files2 = os.listdir('./result')
-	if len(_files1)>1:
-	    os.remove('./img_res/*.jpg')
-	if len(_files2)>1:
-	    os.remove('./result/*.txt')
-        file_name = sys.argv[1]
+	print len(_files1)
+	if len(_files1)>0:
+	    shutil.rmtree('img_res')
+	    os.mkdir('img_res')
+	if len(_files2)>0:
+	    shutil.rmtree('result')
+	    os.mkdir('result')
+	file_name = sys.argv[1]
 	cnt = convert_to_jpg(file_name)
 	img1, arr1 = predictImage('img_res/frame1.jpg')
 	img_0, arr_0 = predictImage('img/mode1.jpg')
@@ -275,3 +279,5 @@ if  __name__ == '__main__':
 	    f.write(str(arr_0[j][1]))
 	    f.write('\n')
 	circuit(cnt, arr1, img_0, arr_0)
+	end_time = time.time()
+	print end_time - start_time
