@@ -2,45 +2,46 @@ clc
 close all
 clear all
 
-img_list = dir('../../face_landmark_arr/img/*.jpg');
-point_list = dir('../../face_landmark_arr/result/*.txt');
+img_list = dir('/home/yun/work/workspace/face_landmark_arr/img/*.jpg');
+point_list = dir('/home/yun/work/workspace/face_landmark_arr/result/*.txt');
 N = size(point_list,1);
-cd '../'
-%mkdir 'Image-Warping'
+cd '/home/yun/work/workspace'
+mkdir 'Image-Warping'
 
 for k = 1:N-1
-  cd '../'
-  point_fn = strcat('face_landmark_arr/result/',point_list(1).name);
-  dis_point_fn = strcat('face_landmark_arr/result/',point_list(k+1).name);
+  cd '/home/yun/work/workspace/Image-Warping'
+  point_fn = strcat('/home/yun/work/workspace/face_landmark_arr/result/',point_list(1).name);
+  dis_point_fn = strcat('/home/yun/work/workspace/face_landmark_arr/result/',point_list(k+1).name);
 
   
   f_pt = importdata(point_fn);
   dis_pt = importdata(dis_point_fn);
 
-  fn= strcat('face_landmark_arr/img/',img_list(1).name);
+  fn= strcat('/home/yun/work/workspace/face_landmark_arr/img/',img_list(1).name);
   rgbimg = imread(fn);
   warpimg = rgbimg;
   if k == 1
     figure(k)
     imshow(rgbimg);
     title('Original Image')
-  end
-  hold on
+  
+    hold on
 
-  S = size(f_pt,1);
-  for i = 1:S
-    plot(f_pt(i,1),f_pt(i,2),'go');
-    %text(f_pt(i,1),f_pt(i,2), int2str(i), 'Color', 'r', 'fontsize', 15);
-  end
+      S = size(f_pt,1);
+      for i = 1:S
+        plot(f_pt(i,1),f_pt(i,2),'go');
+        %text(f_pt(i,1),f_pt(i,2), int2str(i), 'Color', 'r', 'fontsize', 15);
+      end
 
-  tri_pt = delaunay(f_pt)
-  fid = fopen('triangle.txt','w');
-  fprintf(fid,'%d %d %d\n',tri_pt.');
-  fclose(fid);
+      tri_pt = delaunay(f_pt)
+      fid = fopen('triangle.txt','w');
+      fprintf(fid,'%d %d %d\n',tri_pt.');
+      fclose(fid);
 
-  H = size(tri_pt,1);
-  for jj = 1:H
-      plot([f_pt(tri_pt(jj,1),1) f_pt(tri_pt(jj,2),1) f_pt(tri_pt(jj,3),1)], [f_pt(tri_pt(jj,1),2) f_pt(tri_pt(jj,2),2) f_pt(tri_pt(jj,3),2)], 'r');     
+      H = size(tri_pt,1);
+      for jj = 1:H
+          plot([f_pt(tri_pt(jj,1),1) f_pt(tri_pt(jj,2),1) f_pt(tri_pt(jj,3),1)], [f_pt(tri_pt(jj,1),2) f_pt(tri_pt(jj,2),2) f_pt(tri_pt(jj,3),2)], 'r');     
+      end
   end
 
   lambda = zeros(3,1);
@@ -72,7 +73,7 @@ for k = 1:N-1
   %title('Warp Image')
 
   mkdir 'dis_img'
-  cd 'dis_img'
+  cd '/home/yun/work/workspace/Image-Warping/dis_img'
   if k==1
     dis_fn = strcat('dis_img0.jpg');
     imwrite(rgbimg, dis_fn)
@@ -92,13 +93,13 @@ for k = 1:N-1
   end
 end
 
-dis_img_list = dir('../dis_img/*.jpg');
+dis_img_list = dir('/home/yun/work/workspace/Image-Warping/dis_img/*.jpg');
 N = length(dis_img_list);
 
 FileName = 'Face.gif';
 
 for k = 1:N
-    cd '../dis_img'
+    cd '/home/yun/work/workspace/Image-Warping/dis_img'
     fn= strcat('dis_img',int2str(k-1),'.jpg');
     RGB = imread(fn);
     imagesc(RGB);
@@ -108,7 +109,7 @@ for k = 1:N
     colormap(map)
     axis image
     
-    cd './Image-Warping'
+    cd '/home/yun/work/workspace/Image-Warping'
     
     if k ==1
         imwrite(A,map,FileName,'gif','LoopCount',Inf,'DelayTime',0.1);
@@ -116,3 +117,7 @@ for k = 1:N
         imwrite(A,map,FileName,'gif','WriteMode','append','DelayTime',0.1);
     end
 end
+
+cd '/home/yun/work/workspace/Image-Warping/warping'
+
+
