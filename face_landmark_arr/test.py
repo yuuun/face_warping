@@ -26,11 +26,8 @@ M_left = -0.15
 M_right = +1.15
 M_top = -0.10
 M_bottom = +1.25
-arr1 = []
-arr2 = []
 
-def draw_opticalflow(plt):
-#    plt.plot([1,200],[1, 300])
+def draw_opticalflow(plt, arr1, arr2):
     for i in range(0,len(arr1)):
         x = [arr1[i][0], arr2[i][0]]
         y = [arr1[i][1], arr2[i][1]]
